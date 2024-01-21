@@ -1,11 +1,35 @@
 import './assets/main.css'
-
-import { createApp } from 'vue'
+import { createApp, h } from 'vue'
 import App from './App.vue'
-import router from './router'
+import Templates from "./views/Templates.vue"
+import Template from "./views/Template.vue"
+import CreateTemplate from "./views/CreateTemplate.vue"
+import { createRouter, createWebHistory, RouterView } from "vue-router"
 
-const app = createApp(App)
+export const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [
+        {
+            path: "/",
+            redirect: to => {
+                // the function receives the target route as the argument
+                // we return a redirect path/location here.
+                return { path: '/templates' }
+            },
+        },
+        { path: '/templates', component: { render: () => h(RouterView) }, children:
+            [
+                { path: '', name: 'templates', component: Templates},
+                { path: '/templates/:id', name: 'view-template', component: Template }
+            ]
+        },
+        {
+            path: "/create",
+            component: CreateTemplate
+        },
+    ]
+})
 
-app.use(router)
-
-app.mount('#app')
+createApp(App)
+.use(router)
+.mount('#app')
