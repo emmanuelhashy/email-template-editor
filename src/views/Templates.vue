@@ -1,8 +1,51 @@
 <script setup lang="ts">
+import CircleToRhombuseSpinner from "../components/Spinners/CircleToRhombuseSpinner.vue"
+import { router } from "../main";
+import { store } from "../store/store"
+import { onMounted } from 'vue'
+
+const { state, FetchAllTemplates } = store
+function viewComponent(id: string) {
+    router.push({ path: `/templates/${id}` })
+}
+function formatDateToWords(dateString: string): string {
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        timeZoneName: 'short'
+    };
+    const formattedDate: string = new Date(dateString).toLocaleDateString('en-US', options);
+    return formattedDate;
+}
+onMounted(() => {
+    FetchAllTemplates()
+})
 
 </script>
 <template>
-<p>Templates</p>
+    <div class="col">
+        <div v-if="state.loadingTemplates"  class="v-spinner">
+            <CircleToRhombuseSpinner />
+        </div>
+        <div v-else class="template-list">
+            <div v-for="template in state.templates" :key="template.ID" @click="viewComponent(template.ID)"
+                class="template-card">
+                <img v-if="template.data.template.bannerImageUrl" class="card-img" :src="template.data.template.bannerImageUrl"
+                    alt="banner" />
+                <img v-else class="card-img"
+                    src="https://res.cloudinary.com/dbgqdye6d/image/upload/v1704989332/NEWSLETTER-HEADER_2.svg" alt="banner">
+                <div>
+                    <p class="text-bold">{{ template.data.template.subject }}</p>
+                    <p>Created At: {{ formatDateToWords(template.createdAt) }}</p>
+                    <p>Created By: {{ template.userId }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <style scoped>
 .col {
