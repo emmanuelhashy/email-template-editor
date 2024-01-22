@@ -3,6 +3,7 @@ import CircleToRhombuseSpinner from "../components/Spinners/CircleToRhombuseSpin
 import { router } from "../main";
 import { store } from "../store/store"
 import { onMounted } from 'vue'
+import { type component } from "../store/store"
 
 const { state, FetchAllTemplates } = store
 function viewComponent(id: string) {

@@ -7,7 +7,7 @@ import CreateTemplate from "./views/CreateTemplate.vue"
 import { createRouter, createWebHistory, RouterView } from "vue-router"
 
 export const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory(),
     routes: [
         {
             path: "/",
