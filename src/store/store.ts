@@ -76,7 +76,7 @@ export type Config = {
 
 const myHeaders = {
     "Content-Type": "application/json",
-    Authorization: "Bearer hgk1cacvuz64",
+    Authorization: `Bearer ${import.meta.env.VITE_TOKEN}` ,
   };
 
   const defaultComponentTypes = <component[]>[
@@ -227,6 +227,7 @@ export const store = {
         paragraphCounter += 1
         store.state.componentList.push(refineComponent);
         if (paragraphCounter === 2) {
+          console.log("Hello")
           setDisabledState(newComponent.id, true)
         }
       }
@@ -296,7 +297,7 @@ export const store = {
     try {
       store.state.loadingTemplate = true
       const url =
-        `https://dev.helloapex.dev/notifications-http/templates/mail-templates/${id}`;
+        `${import.meta.env.VITE_API_URL}/${id}`;
       const response = await fetch(url, {
         method: "GET",
         headers: myHeaders,
@@ -310,16 +311,15 @@ export const store = {
           };
         store.state.template = transformedData;
       }  
-    } catch (error:any) {
+    } catch (error) {
       store.state.loadingTemplate = false
-      triggerToast(error.message, 'error')
+      console.log(error)
     }
   },
   FetchAllTemplates: async () => {
     try {
       store.state.loadingTemplates = true
-      const url =
-        "https://dev.helloapex.dev/notifications-http/templates/mail-templates";
+      const url =import.meta.env.VITE_API_URL;
       const response = await fetch(url, {
         method: "GET",
         headers: myHeaders,
@@ -343,8 +343,7 @@ export const store = {
   SaveTemplate: async (tempData: SanitizedTemplateData) => {
     try {
         store.state.creatingTemplate = true
-        const url =
-          "https://dev.helloapex.dev/notifications-http/templates/mail-templates";
+        const url = import.meta.env.VITE_API_URL
         const response = await fetch(url, {
           method: "POST",
           headers: myHeaders,
@@ -355,8 +354,6 @@ export const store = {
         store.state.creatingTemplate = false
         if(response.ok) {
           triggerToast('Template created successfully', 'success');
-          store.state.componentList = <component[]>[]
-          store.state.configData = <Config>{}
         }
         
     } catch (error:any) {

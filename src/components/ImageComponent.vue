@@ -21,6 +21,7 @@ const props = defineProps({
 
 const isDeleteModalOpen = ref(false);
 const showDeleteModal = ref(false)
+console.log(props.item)
 function toggleImgMenu() {
     closeAllMenu()
     toggleMenu(props.item.id)

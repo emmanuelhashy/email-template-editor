@@ -7,6 +7,7 @@ import IconLinkedIn from "../components/icons/IconLinkedIn.vue";
 import IconInstagram from "../components/icons/IconInstagram.vue";
 import CircleToRhombuseSpinner from "../components/Spinners/CircleToRhombuseSpinner.vue"
 import { store } from "../store/store";
+import { type component } from "../store/store";
 import { onMounted } from "vue";
 import { useRoute } from "vue-router";
 
@@ -14,6 +15,7 @@ const { state, FetchTemplateById } = store;
 const route = useRoute();
 
 onMounted(() => {
+  console.log(route.params.id, state.template);
   FetchTemplateById(route.params.id);
 });
 </script>

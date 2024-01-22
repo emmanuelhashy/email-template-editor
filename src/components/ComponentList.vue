@@ -33,7 +33,7 @@ function addComponent(item: component) {
     </div>
     <div class="list-container">
         <div v-for="d in sortedComponentList" :key="d.id" class="list">
-            <div class="element"> 
+            <div class="element">
                 <div class="right">
                     <div v-if="d.iconType === 'image'">
                         <ImageComponent :item="d" />
@@ -92,6 +92,7 @@ function addComponent(item: component) {
     font-weight: 600;
     cursor: pointer;
 }
+
 .reorder {
     display: flex;
     justify-content: end;
@@ -181,4 +182,5 @@ function addComponent(item: component) {
     .list-container {
         margin-top: 1rem;
     }
-}</style>
+}
+</style>

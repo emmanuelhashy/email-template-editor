@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import NavBar from './components/NavBar.vue'
 import Sidebar from './components/Sidebar.vue'
+import {store} from "./store/store"
 
+const {closeAllMenu} = store
 </script>
 
 <template>
-  <div class="h-vh">
+  <div @click="closeAllMenu" class="h-vh">
     <NavBar/>
     <main class="main">
       <Sidebar/>

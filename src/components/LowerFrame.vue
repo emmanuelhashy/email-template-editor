@@ -23,6 +23,7 @@ watchEffect(() =>
 );
 
 function getImgURL(val: string) {
+    console.log({val})
     bannerUrl.value = val
 }
 </script>
