@@ -1,9 +1,11 @@
 <script setup lang="ts">
-
+import Preview from "../components/Preview.vue";
+import Frame from "../components/Frame.vue"
 </script>
 <template>
     <div class="main">
-        create Template
+        <Frame/>
+        <Preview/>
     </div>
 </template>
 <style scoped>
