@@ -14,13 +14,19 @@ function formatDateToWords(dateString: string): string {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        timeZoneName: 'short'
     };
     const formattedDate: string = new Date(dateString).toLocaleDateString('en-US', options);
     return formattedDate;
+}
+function formatDateToTime(dateString: string): string {
+    const currentDate = new Date(dateString);
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+    const seconds = currentDate.getSeconds();
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + period;
+
+    return formattedTime
 }
 onMounted(() => {
     FetchAllTemplates()
@@ -29,19 +35,24 @@ onMounted(() => {
 </script>
 <template>
     <div class="col">
-        <div v-if="state.loadingTemplates"  class="v-spinner">
+        <div v-if="state.loadingTemplates" class="v-spinner">
             <CircleToRhombuseSpinner />
         </div>
         <div v-else class="template-list">
-            <div v-for="template in state.templates" :key="template.ID" @click="viewComponent(template.ID)"
+            <div v-if="state.templates.length < 1">
+                <h3>No Template available</h3>
+            </div>
+            <div v-else v-for="template in state.templates" :key="template.ID" @click="viewComponent(template.ID)"
                 class="template-card">
-                <img v-if="template.data.template.bannerImageUrl" class="card-img" :src="template.data.template.bannerImageUrl"
-                    alt="banner" />
+                <img v-if="template.data.template.bannerImageUrl" class="card-img"
+                    :src="template.data.template.bannerImageUrl" alt="banner" />
                 <img v-else class="card-img"
-                    src="https://res.cloudinary.com/dbgqdye6d/image/upload/v1704989332/NEWSLETTER-HEADER_2.svg" alt="banner">
-                <div>
+                    src="https://res.cloudinary.com/dbgqdye6d/image/upload/v1704989332/NEWSLETTER-HEADER_2.svg"
+                    alt="banner">
+                <div class="card_text-content">
                     <p class="text-bold">{{ template.data.template.subject }}</p>
-                    <p>Created At: {{ formatDateToWords(template.createdAt) }}</p>
+                    <p>Date: {{ formatDateToWords(template.createdAt) }}</p>
+                    <p>Time: {{ formatDateToTime(template.createdAt) }}</p>
                     <p>Created By: {{ template.userId }}</p>
                 </div>
             </div>
@@ -54,6 +65,7 @@ onMounted(() => {
     flex-direction: column;
     width: 100%;
 }
+
 .v-spinner {
     display: flex;
     justify-content: end;
@@ -103,17 +115,24 @@ onMounted(() => {
 @media (max-width:720px) {
     .template-card {
         flex-direction: column;
+        padding: 0;
     }
 
     .card-img {
         width: 100%;
-        height: 6rem;
+        height: 9rem;
         margin-right: 0;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+    .card_text-content {
+        padding: 1rem;
     }
 }
 
 @media (max-width:480px) {
     .template-list {
+        padding: 0;
         padding-top: 10rem;
         padding-bottom: 6rem;
     }
