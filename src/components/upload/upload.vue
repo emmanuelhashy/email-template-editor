@@ -1,10 +1,11 @@
 <template>
-    <div>
+    <div class="row">
         <div class="split">
+            <p class="text-truncate" v-if="imgUrl">{{ imgUrl }}</p>
+            <p v-else>No file</p>
             <button v-on:click="open" id="upload_widget" class="upload-button">
                 Upload image
             </button>
-            <img v-if="imgUrl" alt="banner" :src="imgUrl" class="img-preview" />
         </div>
         <p v-if="errorMessage">{{ errorMessage }}</p>
     </div>
@@ -14,7 +15,7 @@
 // import cloudinary from 'cloudinary';
 const cloudName = "hzxyensd5";
 const uploadPreset = "aoh4fpwm";
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     callbackFunc: {
@@ -68,6 +69,14 @@ const myWidget = cloudinary.createUploadWidget(
 function open() {
     myWidget.open();
 }
+
+const handleDataReset = (event: any) => {
+    imgUrl.value = ""
+}
+
+onMounted(() => {
+      window.addEventListener('resetData', handleDataReset);
+    });
 </script>  
 <style scoped>
 footer > div > img{
@@ -86,13 +95,32 @@ footer > div > img{
     background-color: #FB8E0B;
     border: #FB8E0B;
     color: white;
+    height: 100%;
     font-size: 14px;
-    border-radius: 4px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
     font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.row{
+    width: 100%;
+    height: 100%;
+}
+
+.text-truncate {
+    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .split {
     display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    height: 100%;
 }
 
 .img-preview {

@@ -6,7 +6,7 @@ import IconAddTemplate from './icons/IconAddTemplate.vue';
 <template>
     <div class="side-bar">
         <div class="user">
-            <img src="../assets/itunes.svg" class="user__img" />
+            <img src="../assets/lock.svg" class="user__img" />
             <p class="user__name">Admin</p>
         </div>
         <router-link class="router-link" to="/templates">
@@ -30,6 +30,10 @@ a {
     display: flex;
     align-items: center;
     margin: 1.3rem 0;
+}
+
+.nav-link {
+    margin-left: 5px;
 }
 
 .user__img {

@@ -1,30 +1,26 @@
 <script setup lang="ts">
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, onMounted } from "vue";
 import { store } from "../store/store";
-
 import Upload from "./upload/upload.vue"
+import CustomSelect from "./custom-select/custom-select.vue"
+import type { Bool } from "../store/store"
 
 const { state, SaveConfig } = store;
-const subject = ref(state.configData.subject || "");
-const bannerUrl = ref(state.configData.bannerUrl || "");
-const showCampaign = ref(state.configData.showCampaign || false);
-const showBanner = ref(state.configData.showBanner || false);
 
-
-
+const onCampaignSelected = (param: Bool) => {
+  state.configData.showCampaign = param.value;
+};
+const onBannerSelected = (param: Bool) => {
+  state.configData.showBanner = param.value;
+};
 watchEffect(() =>
   SaveConfig({
     ...state.configData,
-    subject: subject.value,
-    bannerUrl: bannerUrl.value,
-    showBanner: showBanner.value,
-    showCampaign: showCampaign.value,
   })
 );
 
 function getImgURL(val: string) {
-    console.log({val})
-    bannerUrl.value = val
+  state.configData.bannerUrl = val
 }
 </script>
 
@@ -37,29 +33,25 @@ function getImgURL(val: string) {
       <div class="form_fields">
         <div>
           <p class="label">Email Subject</p>
-          <input class="input" type="text" placeholder="Enter Email Subject" v-model="subject" />
+          <input class="input" type="text" placeholder="Enter Email Subject" v-model="state.configData.subject" />
+          <span style="color: red; font-size: 14px;">{{ state.fieldErrors.subject }}</span>
         </div>
+        <div>
+          <p class="label">Show Campaign?</p>
+          <CustomSelect :options="state.options" @selected="onCampaignSelected" />
+        </div>
+        
         <div>
           <p class="label">Banner Image</p>
           <div class="input">
-            <Upload :callbackFunc="getImgURL"/>
-
+            <Upload :callbackFunc="getImgURL" />
           </div>
         </div>
         <div>
           <p class="label">Show Banner?</p>
-          <select class="select" placeholder="show banner" v-model="showBanner">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
+          <CustomSelect :options="state.options" @selected="onBannerSelected" />
         </div>
-        <div>
-          <p class="label">Show Campaign?</p>
-          <select class="select" v-model="showCampaign">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-        </div>
+
       </div>
     </div>
   </div>
@@ -68,6 +60,7 @@ function getImgURL(val: string) {
 .label {
   font-size: 14px;
 }
+
 .preview-btn {
   display: flex;
   margin: 2rem 2rem;
@@ -155,6 +148,7 @@ function getImgURL(val: string) {
   width: 100%;
   margin-bottom: 1rem;
 }
+
 .header-text {
   color: #8a8a8a;
   font-weight: 500;
@@ -167,7 +161,7 @@ function getImgURL(val: string) {
   border-radius: 13px;
   color: #000000;
   border: 1px solid #b1b1b1;
-  padding: 16px 17px;
+  padding-left: 16px;
   font-size: 14px;
   display: flex;
   align-items: center;

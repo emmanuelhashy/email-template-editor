@@ -9,6 +9,10 @@ import { type component } from "../store/store"
 import IconBin from "./icons/IconBin.vue";
 import IconCaretUp from "./icons/IconCaretUp.vue";
 import IconCaretDown from "./icons/IconCaretDown.vue";
+import IconLightCaretUp from "./icons/IconLightCaretUp.vue";
+import IconLightCaretDown from "./icons/IconLightCaretDown.vue";
+import CustomSelect from "./custom-select/custom-select.vue"
+import type { Bool } from "../store/store"
 
 const {
   state, 
@@ -18,7 +22,9 @@ const {
   closeAllMenu, 
   toggleMenu,
   moveUp,
-  moveDown
+  moveDown,
+  findFirstPosition,
+  findLastPosition
 } = store
 const props = defineProps({
   item: {
@@ -30,7 +36,15 @@ const text = ref(props.item.value || "")
 const isModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const selectedOption = ref(props.item.properties?.alignment || "left")
+const options = ref([
+  { name: "Left", value: "left" },
+  { name: "Right", value: "right" },
+  { name: "Center", value: "center" }
+]);
 
+const onAlignmentSelected = (param: Bool) => {
+  selectedOption.value = param.value;
+};
 function toggleParagraphMenu() {
   closeAllMenu()
   toggleMenu(props.item.id)
@@ -77,10 +91,16 @@ function deleteComponent() {
 <template>
   <div class="paragraph-card">
     <div v-if="state.reOrderComponents" class="left">
-            <span @click="moveUp(item)">
+      <span style="cursor:not-allowed" v-if="findFirstPosition(item)">
+                <IconLightCaretUp/>
+            </span>
+            <span v-else @click="moveUp(item)">
                 <IconCaretUp />
             </span>
-            <span @click="moveDown(item)">
+            <span style="cursor:not-allowed" v-if="findLastPosition(item)">
+                <IconLightCaretDown/>
+            </span>
+            <span v-else @click="moveDown(item)">
                 <IconCaretDown />
             </span>
         </div>
@@ -104,13 +124,10 @@ function deleteComponent() {
   </div>
   <Modal :open="isModalOpen" @close="isModalOpen = !isModalOpen">
     <div class="form_fields">
-      <input class="input" type="text" placeholder="Enter Email Subject" @change="modifyComponentValue(item.id, text)" v-model="text" />
-      <select class="input" v-model="selectedOption">
-        <option disabled>Alignment</option>
-        <option value="left">Left</option>
-        <option value="right">Right</option>
-        <option value="center">Center</option>
-      </select>
+      <label>Text</label>
+      <input class="input" type="text" placeholder="Enter text" @change="modifyComponentValue(item.id, text)" v-model="text" />
+      <label>Alignment</label>
+      <CustomSelect :options="options" @selected="onAlignmentSelected" />
       <div class="form_fields__btns">
         <button @click="saveComponentProperty" class="btn bg-orange">
           <span>Save Changes</span>
@@ -137,6 +154,9 @@ function deleteComponent() {
     </Modal>
 </template>
 <style scoped>
+label {
+  margin-bottom: -25px;
+}
 .left {
     display: flex;
     flex-direction: column;
@@ -197,6 +217,7 @@ span {
   display: flex;
   align-items: center;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .menu_item:hover {

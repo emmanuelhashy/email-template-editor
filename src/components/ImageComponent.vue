@@ -10,8 +10,10 @@ import { store } from "../store/store"
 import { type component } from "../store/store"
 import IconCaretUp from "./icons/IconCaretUp.vue";
 import IconCaretDown from "./icons/IconCaretDown.vue";
+import IconLightCaretUp from "./icons/IconLightCaretUp.vue";
+import IconLightCaretDown from "./icons/IconLightCaretDown.vue";
 
-const { state, modifyComponentValue, DeleteComponent, closeAllMenu, toggleMenu, moveUp, moveDown } = store
+const { state, modifyComponentValue, DeleteComponent, closeAllMenu, toggleMenu, moveUp, moveDown, findFirstPosition, findLastPosition } = store
 const props = defineProps({
     item: {
         type: Object as () => component, // Specify the type of the prop
@@ -21,7 +23,6 @@ const props = defineProps({
 
 const isDeleteModalOpen = ref(false);
 const showDeleteModal = ref(false)
-console.log(props.item)
 function toggleImgMenu() {
     closeAllMenu()
     toggleMenu(props.item.id)
@@ -48,10 +49,16 @@ function getImgURL(val: string) {
 <template>
     <div class="image-card">
         <div v-if="state.reOrderComponents" class="left">
-            <span @click="moveUp(item)">
+            <span style="cursor:not-allowed" v-if="findFirstPosition(item)">
+                <IconLightCaretUp/>
+            </span>
+            <span v-else @click="moveUp(item)">
                 <IconCaretUp />
             </span>
-            <span @click="moveDown(item)">
+            <span style="cursor:not-allowed" v-if="findLastPosition(item)">
+                <IconLightCaretDown/>
+            </span>
+            <span v-else @click="moveDown(item)">
                 <IconCaretDown />
             </span>
         </div>
@@ -95,6 +102,10 @@ function getImgURL(val: string) {
     align-self: center;
 }
 
+.left span {
+    cursor: pointer;
+}
+
 .right {
     width: 100%;
 }
@@ -133,10 +144,11 @@ span {
     border-radius: 13px;
     color: #000000;
     border: 1px solid #b1b1b1;
-    padding: 16px 17px;
+    padding-left: 16px;
     font-size: 14px;
     box-sizing: border-box;
     display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -165,6 +177,7 @@ span {
     display: flex;
     align-items: center;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .menu_item:hover {
@@ -209,7 +222,7 @@ span {
 }
 
 .bg-gray {
-    background-color: #F3F3F3;
-    color: #909090;
+    background-color: #959595c0;
+    color: white;
 }
 </style>

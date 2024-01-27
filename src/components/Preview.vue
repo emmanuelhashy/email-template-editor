@@ -9,7 +9,7 @@ import { store } from "../store/store"
 import { type component } from "../store/store";
 import CircleToRhombuseSpinner from "./Spinners/CircleToRhombuseSpinner.vue"
 
-const { state, FindComponent, SaveTemplate, } = store
+const { state, FindComponent, SaveTemplate,checkFilledComponent } = store
 
 function getAlignment(type: string, position: number): "center" | "left" | "right" | undefined {
     return FindComponent(type)[position]?.properties?.alignment
@@ -56,7 +56,7 @@ function submitTemplate() {
             </div>
             <div class="banners">
                 <img v-if="state.configData.showBanner" alt="banner image" class="banner-img" :src="getValue('Image', 0)" />
-                <p :style="{ fontSize: '', textAlign: getAlignment('Text', 0) }" class="banners__title">{{ getValue('Text',
+                <p :style="{ fontSize: getSize('Text', 0), textAlign: getAlignment('Text', 0) }" class="banners__title">{{ getValue('Text',
                     0) }}</p>
                 <p :style="{ textAlign: getAlignment('Paragraph', 0) }" class="banners__desc">
                     {{ getValue('Paragraph', 0) }}
@@ -69,7 +69,6 @@ function submitTemplate() {
                     {{ getValue('Paragraph', 1) }}
                 </p>
                 <div v-if="state.configData.showCampaign" class="social-campaign">
-                    <p>{{ state.configData.showCampaign }}</p>
                     <div class="social-icons">
                         <a href="" target="_blank">
                             <IconTwitter />
@@ -116,7 +115,7 @@ function submitTemplate() {
             <div v-if="state.creatingTemplate" class="btn-submit spinner-size">
                 <CircleToRhombuseSpinner color="white" />
             </div>
-            <button @click="submitTemplate" v-else class="btn-submit">
+            <button v-show="checkFilledComponent()" @click="submitTemplate" v-else class="btn-submit">
                 Submit Template
             </button>
         </div>
@@ -133,6 +132,8 @@ function submitTemplate() {
 
 .submit-section {
     padding: 0 2rem;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .btn-submit {
@@ -166,6 +167,7 @@ function submitTemplate() {
 .social-campaign {
     border-top: 1px solid #EDF2F7;
     margin-top: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .btn-container {
@@ -192,7 +194,7 @@ function submitTemplate() {
     display: flex;
     align-items: center;
     width: 8rem;
-    height: 3.5rem;
+    height: 3.109rem;
     justify-content: center;
     background-color: white;
     border: 0.5px solid #1B1C20;
@@ -214,6 +216,7 @@ function submitTemplate() {
 a {
     text-decoration: none;
     color: #fb8e0b;
+    cursor: pointer;
 }
 
 .banners {

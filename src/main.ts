@@ -4,7 +4,10 @@ import App from './App.vue'
 import Templates from "./views/Templates.vue"
 import Template from "./views/Template.vue"
 import CreateTemplate from "./views/CreateTemplate.vue"
+import NotFound from "./views/NotFound.vue"
 import { createRouter, createWebHistory, RouterView } from "vue-router"
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -27,9 +30,14 @@ export const router = createRouter({
             path: "/create",
             component: CreateTemplate
         },
+        {
+            path: "/:notFound",
+            component: NotFound
+        },
     ]
 })
 
-createApp(App)
-.use(router)
-.mount('#app')
+const app = createApp(App)
+app.component("v-select", vSelect);
+app.use(router)
+app.mount('#app')

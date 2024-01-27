@@ -156,19 +156,21 @@ function addComponent(item: component) {
     background-color: #EBEBEB;
 }
 
-.disabled:hover {
-    background-color: #ebebeb34;
-    cursor: default;
+.disabled {
+    background-color: #ebebeb82;
+    cursor: not-allowed;
 }
 
 .menu_text {
     margin-left: 5px;
 }
-
+.add-btn span {
+    margin-right: 4px;
+}
 .add-btn {
     padding: 14px 50px;
     background-color: #FB8E0B;
-    border-radius: 30px;
+    border-radius: 4px;
     border: none;
     color: white;
     font-size: 18px;
@@ -176,6 +178,8 @@ function addComponent(item: component) {
     display: flex;
     align-items: center;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 @media (max-width:480px) {

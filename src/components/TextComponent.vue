@@ -9,6 +9,10 @@ import { type component } from "../store/store"
 import IconBin from "./icons/IconBin.vue";
 import IconCaretUp from "./icons/IconCaretUp.vue";
 import IconCaretDown from "./icons/IconCaretDown.vue";
+import IconLightCaretUp from "./icons/IconLightCaretUp.vue";
+import IconLightCaretDown from "./icons/IconLightCaretDown.vue";
+import CustomSelect from "./custom-select/custom-select.vue"
+import type { Bool } from "../store/store"
 
 const {
     state, 
@@ -18,7 +22,9 @@ const {
     closeAllMenu, 
     toggleMenu,
     moveUp,
-    moveDown
+    moveDown,
+    findFirstPosition,
+    findLastPosition
 } = store
 const props = defineProps({
   item: {
@@ -31,6 +37,25 @@ const isModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const selectedAlignment = ref(props.item.properties?.alignment || "left")
 const selectedSize = ref(props.item.properties?.size || "22px")
+
+const options = ref([
+  { name: "Left", value: "left" },
+  { name: "Right", value: "right" },
+  { name: "Center", value: "center" }
+]);
+const sizeOptions = ref([
+{ name: "H1", value: "24px" },
+  { name: "H2", value: "22px" },
+  { name: "H3", value: "20px" }
+])
+
+const onAlignmentSelected = (param: Bool) => {
+    selectedAlignment.value = param.value;
+};
+const onSizeSelected = (param: Bool) => {
+    selectedSize.value = param.value;
+};
+
 function toggleTextMenu() {
     closeAllMenu()
     toggleMenu(props.item.id)
@@ -78,10 +103,16 @@ function deleteComponent() {
 <template>
     <div class="image-card">
         <div v-if="state.reOrderComponents" class="left">
-            <span @click="moveUp(item)">
+            <span style="cursor:not-allowed" v-if="findFirstPosition(item)">
+                <IconLightCaretUp/>
+            </span>
+            <span v-else @click="moveUp(item)">
                 <IconCaretUp />
             </span>
-            <span @click="moveDown(item)">
+            <span style="cursor:not-allowed" v-if="findLastPosition(item)">
+                <IconLightCaretDown/>
+            </span>
+            <span v-else @click="moveDown(item)">
                 <IconCaretDown />
             </span>
         </div>
@@ -107,19 +138,12 @@ function deleteComponent() {
     </div>
     <Modal :open="isModalOpen" @close="isModalOpen = !isModalOpen">
         <div class="form_fields">
-            <input class="input" type="text" placeholder="Enter Email Subject" v-model="text" @change="modifyComponentValue(item.id, text)"/>
-            <select class="input" v-model="selectedSize">
-                <option disabled>Header Size</option>
-                <option value="24px">H1</option>
-                <option value="22px">H2</option>
-                <option value="20px">H3</option>
-            </select>
-            <select class="input" v-model="selectedAlignment">
-                <option disabled>Alignment</option>
-                <option value="left">Left</option>
-                <option value="right">Right</option>
-                <option value="center">Center</option>
-            </select>
+            <label>Text</label>
+            <input class="input" type="text" placeholder="Enter text" v-model="text" @change="modifyComponentValue(item.id, text)"/>
+            <label>Text size</label>
+            <CustomSelect :options="sizeOptions" @selected="onSizeSelected" />
+            <label>Alignment</label>
+            <CustomSelect :options="options" @selected="onAlignmentSelected" />
             <div class="form_fields__btns">
                 <button @click="saveComponentProperty" class="btn bg-orange">
                     <span>Save Changes</span>
@@ -208,6 +232,7 @@ span {
     display: flex;
     align-items: center;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .menu_item:hover {
@@ -218,8 +243,11 @@ span {
     margin-left: 5px;
 }
 
+label {
+    margin-bottom: -15px;
+}
 .form_fields {
-    height: 16rem;
+    height: 21rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
