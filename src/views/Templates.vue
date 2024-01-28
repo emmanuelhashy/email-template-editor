@@ -47,7 +47,7 @@ onMounted(() => {
                 <img v-if="template.data.template.bannerImageUrl" class="card-img"
                     :src="template.data.template.bannerImageUrl" alt="banner" />
                 <img v-else class="card-img"
-                    src="https://res.cloudinary.com/dbgqdye6d/image/upload/v1704989332/NEWSLETTER-HEADER_2.svg"
+                    src="../assets/placeholder-image.png"
                     alt="banner">
                 <div class="card_text-content">
                     <p class="text-bold">{{ template.data.template.subject }}</p>

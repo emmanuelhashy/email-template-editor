@@ -20,7 +20,7 @@ type TextSize = {
 type Content = {
   component: string;
   text?: string;
-  align?: string;
+  align?: "center" | "left" | "right";
   imageUrl?: string;
 }
 
@@ -447,28 +447,28 @@ export const store = {
     textCounter = 0;
     imageCounter = 0;
 
-    // try {
-    //     store.state.creatingTemplate = true
-    //     const url = import.meta.env.VITE_API_URL
-    //     const response = await fetch(url, {
-    //       method: "POST",
-    //       headers: myHeaders,
-    //       body: JSON.stringify({
-    //         template: JSON.stringify(tempData)
-    //     })
-    //     });
-    //     store.state.creatingTemplate = false
-    //     if(response.ok) {
-    //       triggerToast('Template created successfully', 'success');
-    //       store.state.componentList = <component[]>[],
-    //       store.state.componentTypes = defaultComponentTypes,
-    //       store.state.configData = <Config>{}
-    //     }
+    try {
+        store.state.creatingTemplate = true
+        const url = import.meta.env.VITE_API_URL
+        const response = await fetch(url, {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify({
+            template: JSON.stringify(tempData)
+        })
+        });
+        store.state.creatingTemplate = false
+        if(response.ok) {
+          triggerToast('Template created successfully', 'success');
+          store.state.componentList = <component[]>[],
+          store.state.componentTypes = defaultComponentTypes,
+          store.state.configData = <Config>{}
+        }
 
-    // } catch (error:any) {
-    //   triggerToast(error.message, 'error')
-    //     store.state.creatingTemplate = false
-    // }
+    } catch (error:any) {
+      triggerToast(error.message, 'error')
+        store.state.creatingTemplate = false
+    }
   }
 };
 

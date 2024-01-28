@@ -15,13 +15,26 @@ const { state, FetchTemplateById } = store;
 const route = useRoute();
 
 onMounted(() => {
-  console.log(route.params.id, state.template);
   FetchTemplateById(route.params.id);
 });
+
+const getComponent = (componentType: string, position: number) => {
+  if (store.state?.template?.data) {
+    const component = store.state?.template?.data?.template?.body?.filter((item) => item.component === componentType)
+    return component[position]
+  }
+}
+const getComponentAlignment = (componentType: string, position: number): "center" | "left" | "right" | undefined => {
+  if (store.state?.template?.data) {
+    const component = store.state?.template?.data?.template?.body?.filter((item) => item.component === componentType)
+    return component[position]?.align
+  }
+}
+
 </script>
 <template>
   <div v-if="state.loadingTemplate" class="v-spinner">
-    <CircleToRhombuseSpinner/>
+    <CircleToRhombuseSpinner />
   </div>
   <div v-else class="container">
     <div class="frame">
@@ -29,21 +42,25 @@ onMounted(() => {
         <img alt="Apex logo" class="logo" src="../assets/logo.svg" height="40px" />
       </div>
       <div class="banners">
-        <img alt="banner image" class="banner-img" :src="state.template.data?.template.bannerImageUrl" />
-        <p class="banners__title">
-          {{ state.template.data?.template.body[0].text }}
+        <img v-if="state.template.data?.template.bannerImageUrl" alt="banner image" class="banner-img"
+          :src="state.template.data?.template.bannerImageUrl" />
+        <img v-else alt="banner image" class="banner-img" src="../assets/placeholder-image.png" />
+        <p :style="{ textAlign: getComponentAlignment('text', 0) }" class="banners__title">
+          {{ getComponent("text", 0)?.text }}
         </p>
-        <p class="banners__desc">
-          {{ state.template.data?.template.body[1].text }}
+        <p :style="{ textAlign: getComponentAlignment('paragraph', 0) }" class="banners__desc">
+          {{ getComponent("paragraph", 0)?.text }}
         </p>
-        <p class="banners__title">
-          {{ state.template.data?.template.body[2].text }}
+        <p :style="{ textAlign: getComponentAlignment('text', 1) }" class="banners__title">
+          {{ getComponent("text", 1)?.text }}
         </p>
         <div class="banner-container">
-          <img alt="banner" class="banner-img" :src="state.template.data?.template.body[3].imageUrl" />
+          <img v-if="getComponent('image', 0)?.imageUrl" alt="banner image" class="banner-img"
+            :src="getComponent('image', 0)?.imageUrl" />
+          <img v-else alt="banner image" class="banner-img" src="../assets/placeholder-image.png" />
         </div>
-        <p class="banners__text">
-          {{ state.template.data?.template.body[4].text }}
+        <p :style="{ textAlign: getComponentAlignment('paragraph', 1) }" class="banners__text">
+          {{ getComponent("paragraph", 1)?.text }}
         </p>
         <div v-if="state.template.data?.template.showSocialCampaign" class="social-campaign">
           <div class="social-icons">
@@ -94,11 +111,12 @@ onMounted(() => {
 </template>
 <style scoped>
 .v-spinner {
-    display: flex;
-    justify-content: end;
-    padding-top: 2rem;
-    width: 40vw;
+  display: flex;
+  justify-content: end;
+  padding-top: 2rem;
+  width: 40vw;
 }
+
 .frame {
   width: 50%;
   display: flex;
@@ -206,5 +224,4 @@ a {
   border-radius: 20px;
   height: 10rem;
   object-fit: cover;
-}
-</style>
+}</style>
