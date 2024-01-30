@@ -55,7 +55,7 @@ function submitTemplate() {
                 <img alt="Apex logo" class="logo" src="../assets/logo.svg" />
             </div>
             <div class="banners">
-                <img v-if="state.configData.showBanner" alt="banner image" class="banner-img" :src="getValue('Image', 0)" />
+                <img v-if="getValue('Image', 0)" alt="Image component" class="banner-img" :src="getValue('Image', 0)" />
                 <p :style="{ fontSize: getSize('Text', 0), textAlign: getAlignment('Text', 0) }" class="banners__title">{{ getValue('Text',
                     0) }}</p>
                 <p :style="{ textAlign: getAlignment('Paragraph', 0) }" class="banners__desc">
@@ -63,7 +63,7 @@ function submitTemplate() {
                 </p>
                 <p :style="{ fontSize: getSize('Text', 1), textAlign: getAlignment('Text', 1) }" class="banners__title">
                     {{ getValue('Text', 1) }}</p>
-                <div v-if="state.configData.bannerUrl" class="banner-container"><img alt="banner" class="banner-img"
+                <div v-if="state.configData.showBanner" class="banner-container"><img alt="banner image" class="banner-img"
                         :src="state.configData.bannerUrl" /></div>
                 <p :style="{ textAlign: getAlignment('Paragraph', 1) }" class="banners__desc">
                     {{ getValue('Paragraph', 1) }}

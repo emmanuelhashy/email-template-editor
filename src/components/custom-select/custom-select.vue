@@ -51,7 +51,6 @@ import type {Bool} from "../../store/store"
       const selectOption = (option: Bool) => {
         selectedOption.value = option.name;
         isOpen.value = false;
-        console.log(isOpen.value, "value");
         
         emit('selected', option);
       };
@@ -108,7 +107,7 @@ import type {Bool} from "../../store/store"
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
-    z-index: 1;
+    z-index: 1000 !important;
     /* display: none; */
   }
   
