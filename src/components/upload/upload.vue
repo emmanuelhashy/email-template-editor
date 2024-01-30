@@ -13,9 +13,11 @@
   
 <script setup lang="ts">
 // import cloudinary from 'cloudinary';
-const cloudName = "hzxyensd5";
-const uploadPreset = "aoh4fpwm";
+const cloudName = import.meta.env.VITE_CLOUD_NAME;
+const uploadPreset = import.meta.env.VITE_UPLOAD_PRESET;
 import { ref, onMounted } from 'vue';
+
+declare const window: any;
 
 const props = defineProps({
     callbackFunc: {
@@ -28,7 +30,7 @@ const imgUrl = ref("")
 const errorMessage = ref("")
 
 
-const myWidget = cloudinary.createUploadWidget(
+const myWidget = window.cloudinary.createUploadWidget(
     {
         cloudName: cloudName,
         uploadPreset: uploadPreset,

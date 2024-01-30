@@ -64,16 +64,16 @@ const getComponentAlignment = (componentType: string, position: number): "center
         </p>
         <div v-if="state.template.data?.template.showSocialCampaign" class="social-campaign">
           <div class="social-icons">
-            <a href="" target="_blank">
+            <a href="https://twitter.com/useapexnetwork" target="_blank">
               <IconTwitter />
             </a>
-            <a href="" target="_blank">
+            <a href="https://web.facebook.com/useapexnetwork" target="_blank">
               <IconFacebook />
             </a>
-            <a href="" target="_blank">
+            <a href="https://www.linkedin.com/company/apex-network-limited/mycompany/" target="_blank">
               <IconLinkedIn />
             </a>
-            <a href="" target="_blank">
+            <a href="https://www.instagram.com/useapexnetwork/" target="_blank">
               <IconInstagram />
             </a>
           </div>
@@ -99,10 +99,10 @@ const getComponentAlignment = (componentType: string, position: number): "center
           </div>
           <p>
             Questions or faq? Contact us at
-            <a href="" target="_blank">Support@apexnetwork.com. </a>
+            <a href="https://apexnetwork.co/contact-us" target="_blank">Support@apexnetwork.com.</a>
             If you'd rather not receive this kind of email, Don’t want any more
             emails from Apexnetwork?
-            <a>Unsubscribe</a>.
+            <a href="#">Unsubscribe</a>.
           </p>
         </div>
       </div>
@@ -163,10 +163,10 @@ const getComponentAlignment = (componentType: string, position: number): "center
   display: flex;
   align-items: center;
   width: 8rem;
-  height: 3.5rem;
+  height: 3.109rem;
   justify-content: center;
   background-color: white;
-  border: 0.5px solid #1b1c20;
+  border: 0.5px solid #1B1C20;
   border-radius: 10px;
   margin-right: 1rem;
   cursor: pointer;
@@ -224,4 +224,5 @@ a {
   border-radius: 20px;
   height: 10rem;
   object-fit: cover;
-}</style>
+}
+</style>
